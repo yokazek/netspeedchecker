@@ -42,7 +42,16 @@
         </section>
 
         <section class="chart-container">
-            <canvas id="speedChart"></canvas>
+            <div class="chart-header">
+                <button id="btn-reset-zoom" class="outline-button small">ズームリセット</button>
+            </div>
+            <div class="main-chart-wrapper">
+                <canvas id="speedChart"></canvas>
+            </div>
+            <div class="nav-chart-wrapper">
+                <canvas id="navChart"></canvas>
+                <div id="nav-brush" class="nav-brush"></div>
+            </div>
         </section>
 
         <section class="history-list">
