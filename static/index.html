@@ -43,21 +43,29 @@
 
         <section class="chart-container">
             <div class="chart-header">
-                <button id="btn-reset-zoom" class="outline-button small">ズームリセット</button>
+                <div class="chart-guide">
+                    <span class="icon">ℹ️</span> 青い範囲をドラッグで移動、端をドラッグでズームできます
+                </div>
+                <div class="button-group">
+                    <button id="btn-reset-zoom" class="outline-button small">直近6時間に戻す</button>
+                    <button id="btn-clear-history" class="outline-button small danger">履歴クリア</button>
+                </div>
             </div>
             <div class="main-chart-wrapper">
                 <canvas id="speedChart"></canvas>
             </div>
             <div class="nav-chart-wrapper">
                 <canvas id="navChart"></canvas>
-                <div id="nav-brush" class="nav-brush"></div>
+                <div id="nav-brush" class="nav-brush">
+                    <div class="handle handle-l"></div>
+                    <div class="handle handle-r"></div>
+                </div>
             </div>
         </section>
 
         <section class="history-list">
             <div class="section-header">
                 <h2>履歴</h2>
-                <button id="btn-clear-history" class="outline-button danger">履歴クリア</button>
             </div>
             <!-- ... 既存のテーブル ... -->
         </section>

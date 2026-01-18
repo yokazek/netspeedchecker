@@ -144,8 +144,30 @@ header p {
 
 .chart-header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chart-guide {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+}
+
+.chart-guide .icon {
+    font-size: 1rem;
 }
 
 .main-chart-wrapper {
@@ -170,6 +192,28 @@ header p {
     cursor: grab;
     z-index: 10;
     pointer-events: auto;
+}
+
+.nav-brush .handle {
+    position: absolute;
+    top: 0;
+    width: 10px;
+    height: 100%;
+    cursor: ew-resize;
+    background: rgba(56, 189, 248, 0.4);
+    transition: background 0.2s;
+}
+
+.nav-brush .handle:hover {
+    background: var(--accent-blue);
+}
+
+.nav-brush .handle-l {
+    left: -5px;
+}
+
+.nav-brush .handle-r {
+    right: -5px;
 }
 
 .nav-brush:active {

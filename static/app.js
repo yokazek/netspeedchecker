@@ -124,6 +124,7 @@ async function fetchData() {
 }
 
 function updateDashboard(data) {
+    const isFirstLoad = chartDataRaw.length === 0;
     chartDataRaw = [...data].reverse();
 
     // 最新のデータをカードに反映
@@ -148,13 +149,19 @@ function updateDashboard(data) {
     navChart.data.datasets[2].data = pings;
     navChart.update();
 
-    // メイングラフの更新 (初期状態では全表示)
+    // メイングラフの更新
     speedChart.data.labels = labels;
     speedChart.data.datasets[0].data = downloads;
     speedChart.data.datasets[1].data = uploads;
     speedChart.data.datasets[2].data = pings;
     speedChart.data.datasets.forEach(ds => ds.spanGaps = false);
-    speedChart.update();
+
+    // 初回ロード時は直近6時間にフォーカス
+    if (isFirstLoad) {
+        setDefaultRange();
+    } else {
+        speedChart.update();
+    }
 
     updateBrushUI();
 
@@ -175,13 +182,38 @@ function updateDashboard(data) {
     });
 }
 
+function setDefaultRange() {
+    if (chartDataRaw.length === 0) return;
+
+    const latestTime = new Date(chartDataRaw[chartDataRaw.length - 1].timestamp + " UTC").getTime();
+    const sixHoursAgo = latestTime - (6 * 60 * 60 * 1000);
+
+    let minIdx = 0;
+    for (let i = chartDataRaw.length - 1; i >= 0; i--) {
+        const t = new Date(chartDataRaw[i].timestamp + " UTC").getTime();
+        if (t < sixHoursAgo) {
+            minIdx = i + 1;
+            break;
+        }
+    }
+
+    // データが少ない場合は全表示
+    if (minIdx >= chartDataRaw.length - 1) minIdx = 0;
+
+    speedChart.options.scales.x.min = minIdx;
+    speedChart.options.scales.x.max = chartDataRaw.length - 1;
+    speedChart.update();
+}
+
 function updateBrushUI() {
     const brush = document.getElementById('nav-brush');
-    const container = brush.parentElement;
     const totalCount = chartDataRaw.length;
-    if (totalCount === 0) return;
+    if (totalCount < 2) {
+        brush.style.left = '0%';
+        brush.style.width = '100%';
+        return;
+    }
 
-    // 現在のメイングラフの表示範囲を取得
     const x = speedChart.scales.x;
     const minIndex = x.min !== undefined ? Math.max(0, x.min) : 0;
     const maxIndex = x.max !== undefined ? Math.min(totalCount - 1, x.max) : totalCount - 1;
@@ -190,46 +222,75 @@ function updateBrushUI() {
     const right = (maxIndex / (totalCount - 1)) * 100;
 
     brush.style.left = `${left}%`;
-    brush.style.width = `${right - left}%`;
+    brush.style.width = `${Math.max(0.1, right - left)}%`;
 }
 
 function initBrushEvents() {
     const brush = document.getElementById('nav-brush');
     const wrapper = brush.parentElement;
+    const handleL = brush.querySelector('.handle-l');
+    const handleR = brush.querySelector('.handle-r');
+
     let isMoving = false;
+    let isResizingL = false;
+    let isResizingR = false;
     let startX, startLeft, startWidth;
 
-    brush.onmousedown = (e) => {
-        isMoving = true;
+    const onStart = (e, mode) => {
+        e.preventDefault();
+        e.stopPropagation();
         startX = e.clientX;
-        startLeft = parseFloat(brush.style.left);
-        startWidth = parseFloat(brush.style.width);
+        startLeft = parseFloat(brush.style.left) || 0;
+        startWidth = parseFloat(brush.style.width) || 100;
+
+        if (mode === 'move') isMoving = true;
+        if (mode === 'resizeL') isResizingL = true;
+        if (mode === 'resizeR') isResizingR = true;
+
         document.body.style.userSelect = 'none';
     };
 
+    brush.onmousedown = (e) => onStart(e, 'move');
+    handleL.onmousedown = (e) => onStart(e, 'resizeL');
+    handleR.onmousedown = (e) => onStart(e, 'resizeR');
+
     window.onmousemove = (e) => {
-        if (!isMoving) return;
+        if (!isMoving && !isResizingL && !isResizingR) return;
+
         const dx = ((e.clientX - startX) / wrapper.offsetWidth) * 100;
-        let newLeft = startLeft + dx;
 
-        // 境界チェック
-        newLeft = Math.max(0, Math.min(newLeft, 100 - startWidth));
+        if (isMoving) {
+            let newLeft = startLeft + dx;
+            newLeft = Math.max(0, Math.min(newLeft, 100 - startWidth));
+            brush.style.left = `${newLeft}%`;
+        } else if (isResizingL) {
+            let newLeft = startLeft + dx;
+            let newWidth = startWidth - dx;
+            if (newLeft < 0) { newWidth += newLeft; newLeft = 0; }
+            if (newWidth < 1) { newLeft = startLeft + startWidth - 1; newWidth = 1; }
+            brush.style.left = `${newLeft}%`;
+            brush.style.width = `${newWidth}%`;
+        } else if (isResizingR) {
+            let newWidth = startWidth + dx;
+            if (startLeft + newWidth > 100) newWidth = 100 - startLeft;
+            if (newWidth < 1) newWidth = 1;
+            brush.style.width = `${newWidth}%`;
+        }
 
-        brush.style.left = `${newLeft}%`;
         syncMainChart();
     };
 
     window.onmouseup = () => {
-        isMoving = false;
+        isMoving = isResizingL = isResizingR = false;
         document.body.style.userSelect = '';
     };
 }
 
 function syncMainChart() {
-    const brush = document.getElementById('nav-brush');
     const totalCount = chartDataRaw.length;
     if (totalCount < 2) return;
 
+    const brush = document.getElementById('nav-brush');
     const leftPercent = parseFloat(brush.style.left) / 100;
     const widthPercent = parseFloat(brush.style.width) / 100;
 
@@ -242,9 +303,7 @@ function syncMainChart() {
 }
 
 function resetZoom() {
-    speedChart.options.scales.x.min = undefined;
-    speedChart.options.scales.x.max = undefined;
-    speedChart.update();
+    setDefaultRange();
     updateBrushUI();
 }
 
