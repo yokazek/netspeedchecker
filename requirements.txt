@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+apscheduler
+speedtest-cli
