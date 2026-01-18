@@ -142,12 +142,20 @@ header p {
     position: relative;
 }
 
-.chart-header {
+.chart-header,
+.logs-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
     gap: 1rem;
+}
+
+.chart-header h2,
+.logs-header h2 {
+    font-size: 1.25rem;
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
 }
 
 .button-group {
@@ -164,6 +172,13 @@ header p {
     background: rgba(255, 255, 255, 0.05);
     padding: 0.4rem 1rem;
     border-radius: 20px;
+}
+
+.chart-guide.footer {
+    justify-content: center;
+    margin-top: 1rem;
+    background: transparent;
+    padding: 0;
 }
 
 .chart-guide .icon {
@@ -282,13 +297,6 @@ tr:hover td {
 .logs-container {
     margin-top: 3rem;
     margin-bottom: 5rem;
-}
-
-.logs-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
 }
 
 .logs-header h2 {

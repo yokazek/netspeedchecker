@@ -43,9 +43,7 @@
 
         <section class="chart-container">
             <div class="chart-header">
-                <div class="chart-guide">
-                    <span class="icon">ℹ️</span> 青い範囲をドラッグで移動、端をドラッグでズームできます
-                </div>
+                <h2>ネットワーク速度推移</h2>
                 <div class="button-group">
                     <button id="btn-reset-zoom" class="outline-button small">直近6時間に戻す</button>
                     <button id="btn-clear-history" class="outline-button small danger">履歴クリア</button>
@@ -61,6 +59,9 @@
                     <div class="handle handle-r"></div>
                 </div>
             </div>
+            <div class="chart-guide footer">
+                <span class="icon">ℹ️</span> 青い範囲をドラッグで移動、端をドラッグでズームできます
+            </div>
         </section>
 
         <section class="history-list">
@@ -73,10 +74,12 @@
         <section class="logs-container">
             <div class="logs-header">
                 <h2>システムログ</h2>
-                <button id="btn-refresh-logs" class="outline-button">更新</button>
+                <div class="button-group">
+                    <button id="btn-refresh-logs" class="outline-button">更新</button>
+                    <button id="btn-clear-logs" class="outline-button danger">ログクリア</button>
+                </div>
             </div>
             <pre id="log-viewer">ログを読み込み中...</pre>
-            <button id="btn-clear-logs" class="outline-button danger" style="margin-top: 1rem;">ログクリア</button>
         </section>
     </div>
     <script src="/static/app.js"></script>
