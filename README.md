@@ -1,6 +1,12 @@
-﻿# NetChecker
+﻿# NetSpeedChecker
 
-Raspberry Pi 上で動作するネットワーク速度測定ツールです。一定間隔で速度を計測し、モダンな Web ダッシュボードで履歴を確認できます。
+[English Version (英語版)](README.en.md)
+
+ネットワーク速度測定ツールです。一定間隔で速度を計測し、モダンな Web ダッシュボードで履歴を確認できます。
+ 
+## 背景
+Nuro光 に変更してからなんかWifi使っていると、つまりみたいなのがあり使うのにすごく時間がかかったり意図せずルーターが再起動しているようで、サポートに連絡してもらちが明かないので、定期的にネットワークに接続する。速度を測るツールを作ってみました。
+
 
 ## 特徴
 - 🚀 **自動計測**: 指定した間隔（デフォルト1時間）で自動的に速度を測定。
@@ -12,7 +18,7 @@ Raspberry Pi 上で動作するネットワーク速度測定ツールです。�
 
 ```bash
 # クローンまたはコピー後、ディレクトリに移動
-cd netchecker
+cd netspeedchecker
 
 # 実行権限を付与
 chmod +x install.sh run.sh
@@ -35,6 +41,7 @@ chmod +x install.sh run.sh
 
 ## 設定
 `main.py` の `CHECK_INTERVAL` を変更することで、測定間隔を調整できます。
+デフォルトは 15 分間隔です。
 
 ```python
 CHECK_INTERVAL = {"minutes": 30}  # 30分間隔にする場合
