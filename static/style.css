@@ -241,6 +241,7 @@ tr:hover td {
 .outline-button:hover {
     background: rgba(56, 189, 248, 0.1);
 }
+
 .danger {
     border-color: #ef4444;
     color: #ef4444;
@@ -248,4 +249,9 @@ tr:hover td {
 
 .danger:hover {
     background: rgba(239, 68, 68, 0.1);
+}
+
+.error-text {
+    color: #ef4444;
+    font-weight: 600;
 }

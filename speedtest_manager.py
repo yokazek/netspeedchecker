@@ -41,6 +41,8 @@ def run_speed_test():
         }
     except Exception as e:
         logger.error(f"Error during speed test: {e}")
+        # エラー時もタイムスタンプを残すために None を保存
+        save_result(None, None, None)
         return None
 
 if __name__ == "__main__":

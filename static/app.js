@@ -126,6 +126,10 @@ function updateDashboard(data) {
     speedChart.data.datasets[0].data = chartData.map(d => d.download);
     speedChart.data.datasets[1].data = chartData.map(d => d.upload);
     speedChart.data.datasets[2].data = chartData.map(d => d.ping);
+
+    // データが null の場合に線を途切れさせる設定 (spanGaps: false はデフォルトだが、明示的に設定)
+    speedChart.data.datasets.forEach(ds => ds.spanGaps = false);
+
     speedChart.update();
 
     // テーブルの更新
@@ -134,11 +138,14 @@ function updateDashboard(data) {
     data.forEach(d => {
         const date = new Date(d.timestamp + " UTC");
         const tr = document.createElement('tr');
+
+        const formatValue = (val, unit) => (val === null || val === undefined) ? `<span class="error-text">Error</span>` : `${val.toFixed(val >= 10 ? 1 : 2)} ${unit}`;
+
         tr.innerHTML = `
             <td>${date.toLocaleString()}</td>
-            <td>${d.download.toFixed(2)} Mbps</td>
-            <td>${d.upload.toFixed(2)} Mbps</td>
-            <td>${d.ping.toFixed(1)} ms</td>
+            <td>${formatValue(d.download, 'Mbps')}</td>
+            <td>${formatValue(d.upload, 'Mbps')}</td>
+            <td>${formatValue(d.ping, 'ms')}</td>
         `;
         tbody.appendChild(tr);
     });
