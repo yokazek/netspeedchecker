@@ -9,18 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initChart();
     fetchHistory(today);
 
-    document.getElementById('btn-load-history').addEventListener('click', () => {
-        const selectedDate = document.getElementById('history-date').value;
+    document.getElementById('history-date').addEventListener('change', (e) => {
+        const selectedDate = e.target.value;
         if (selectedDate) {
             fetchHistory(selectedDate);
-        }
-    });
-
-    document.getElementById('btn-reset-zoom').addEventListener('click', () => {
-        if (speedChart) {
-            speedChart.options.scales.x.min = undefined;
-            speedChart.options.scales.x.max = undefined;
-            speedChart.update();
         }
     });
 });
