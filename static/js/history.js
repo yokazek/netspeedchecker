@@ -1,12 +1,12 @@
 import { api } from './api.js';
-import { formatValue, formatTime } from './utils.js';
+import { formatValue, formatTime, getTZOffset } from './utils.js';
 import { getCommonDatasets, getChartOptions } from './chart-config.js';
 
 let speedChart;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 今日をデフォルト値に設定
-    const today = new Date().toISOString().split('T')[0];
+    // ローカルタイム(ブラウザ基準)で今日を取得
+    const today = new Date().toLocaleDateString('sv-SE'); // YYYY-MM-DD format
     document.getElementById('history-date').value = today;
 
     initChart();
@@ -38,7 +38,8 @@ async function fetchHistory(date) {
     status.innerText = 'データを読み込み中...';
 
     try {
-        const data = await api.fetchHistoryByDay(date);
+        const offset = getTZOffset();
+        const data = await api.fetchHistoryByDay(date, offset);
 
         if (data.length === 0) {
             noData.style.display = 'block';

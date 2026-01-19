@@ -19,3 +19,12 @@ export const escapeHtml = (text) => {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 };
+
+export const getTZOffset = () => {
+    try {
+        const offset = -new Date().getTimezoneOffset() / 60;
+        return isNaN(offset) ? 9 : offset;
+    } catch (e) {
+        return 9; // 取得失敗時は JST 基準
+    }
+};

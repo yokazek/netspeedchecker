@@ -8,8 +8,8 @@ export const api = {
         return await response.json();
     },
 
-    async fetchHistoryByDay(date) {
-        const response = await fetch(`/api/history/day?date=${date}`);
+    async fetchHistoryByDay(date, tzOffset = 9) {
+        const response = await fetch(`/api/history/day?date=${date}&tz_offset=${tzOffset}`);
         return await response.json();
     },
 

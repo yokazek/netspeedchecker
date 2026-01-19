@@ -1,0 +1,39 @@
+.current-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.controls {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+#status-message {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--accent-blue);
+    height: 1.5rem;
+}
+
+.logs-container {
+    margin-top: 3rem;
+    margin-bottom: 5rem;
+}
+
+.chart-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+@media (max-width: 600px) {
+    .chart-footer {
+        flex-direction: column;
+        justify-content: center;
+    }
+}

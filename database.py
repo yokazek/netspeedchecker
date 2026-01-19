@@ -39,15 +39,19 @@ def get_history(limit: int = 50):
         )
         return [dict(row) for row in cursor.fetchall()]
 
-def get_history_by_date(date_str: str):
-    """指定した日付（YYYY-MM-DD）の履歴を取得"""
+def get_history_by_date(date_str: str, tz_offset: int = 9):
+    """指定した日付（YYYY-MM-DD）の履歴を取得 (指定されたタイムゾーン基準)"""
     with sqlite3.connect(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
-        # SQLiteのdate関数を使用して日付部分を比較
+        
+        # オフセット文字列を作成 (例: +9 -> '+9 hours', -5 -> '-5 hours')
+        offset_str = f"{tz_offset:+} hours"
+        
+        # UTCのタイムスタンプにオフセットを加えて日付比較を行う
         cursor.execute(
-            "SELECT id, timestamp, download, upload, ping FROM speed_tests WHERE date(timestamp) = date(?) ORDER BY timestamp ASC",
-            (date_str,)
+            f"SELECT id, timestamp, download, upload, ping FROM speed_tests WHERE date(timestamp, ?) = date(?) ORDER BY timestamp ASC",
+            (offset_str, date_str)
         )
         return [dict(row) for row in cursor.fetchall()]
 

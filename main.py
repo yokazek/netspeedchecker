@@ -39,8 +39,8 @@ async def get_speed_history(limit: int = 50):
     return get_history(limit)
 
 @app.get("/api/history/day")
-async def get_speed_history_by_date(date: str):
-    return get_history_by_date(date)
+async def get_speed_history_by_date(date: str, tz_offset: int = 9):
+    return get_history_by_date(date, tz_offset)
 
 @app.post("/api/test")
 async def trigger_speed_test(background_tasks: BackgroundTasks):
