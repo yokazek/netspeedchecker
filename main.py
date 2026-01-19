@@ -33,9 +33,18 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 async def read_index():
     return FileResponse(os.path.join(static_dir, "index.html"))
 
+@app.get("/history")
+async def read_history():
+    return FileResponse(os.path.join(static_dir, "history.html"))
+
 @app.get("/api/history")
 async def get_speed_history(limit: int = 50):
     return get_history(limit)
+
+@app.get("/api/history/day")
+async def get_speed_history_by_date(date: str):
+    from database import get_history_by_date
+    return get_history_by_date(date)
 
 @app.post("/api/test")
 async def trigger_speed_test(background_tasks: BackgroundTasks):

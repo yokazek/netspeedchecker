@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetChecker - 履歴表示</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .history-controls {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .date-picker-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        input[type="date"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        .nav-links {
+            margin-bottom: 2rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        .no-data-message {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>NetSpeedChecker</h1>
+            <p>Historical Data Viewer</p>
+        </header>
+
+        <nav class="nav-links">
+            <a href="/" class="back-link">← ライブ表示に戻る</a>
+        </nav>
+
+        <section class="history-controls">
+            <div class="date-picker-group">
+                <label for="history-date">表示する日付:</label>
+                <input type="date" id="history-date">
+                <button id="btn-load-history" class="outline-button">読み込み</button>
+            </div>
+            <div id="status-history"></div>
+        </section>
+
+        <section class="chart-container">
+            <div class="chart-header">
+                <h2 id="chart-title">ネットワーク速度推移</h2>
+                <div class="button-group">
+                    <button id="btn-reset-zoom" class="outline-button small">全範囲を表示</button>
+                </div>
+            </div>
+            <div class="main-chart-wrapper">
+                <canvas id="speedChart"></canvas>
+            </div>
+            <div id="no-data" class="no-data-message" style="display: none;">
+                指定された日付のデータが見つかりませんでした。
+            </div>
+            <div class="chart-guide footer">
+                <span class="icon">ℹ️</span> 過去の計測結果を1日単位で表示します
+            </div>
+        </section>
+
+        <section class="history-list">
+            <div class="section-header">
+                <h2>詳細データ一覧</h2>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>時刻</th>
+                            <th>Download (Mbps)</th>
+                            <th>Upload (Mbps)</th>
+                            <th>Ping (ms)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body">
+                        <!-- Data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <script src="/static/history.js"></script>
+</body>
+
+</html>

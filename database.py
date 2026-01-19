@@ -40,6 +40,18 @@ def get_history(limit: int = 50):
         )
         return [dict(row) for row in cursor.fetchall()]
 
+def get_history_by_date(date_str: str):
+    """指定した日付（YYYY-MM-DD）の履歴を取得"""
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        # SQLiteのdate関数を使用して日付部分を比較
+        cursor.execute(
+            "SELECT id, timestamp, download, upload, ping FROM speed_tests WHERE date(timestamp) = date(?) ORDER BY timestamp ASC",
+            (date_str,)
+        )
+        return [dict(row) for row in cursor.fetchall()]
+
 def clear_history():
     """すべての履歴を削除"""
     with sqlite3.connect(DB_PATH) as conn:
