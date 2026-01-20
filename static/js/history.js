@@ -1,5 +1,5 @@
 import { api } from './api.js';
-import { formatValue, formatTime, getTZOffset } from './utils.js';
+import { formatValue, formatTime, getTZOffset, formatPing } from './utils.js';
 import { getCommonDatasets, getChartOptions } from './chart-config.js';
 
 let speedChart;
@@ -47,6 +47,7 @@ async function fetchHistory(date) {
             tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">データがありません</td></tr>';
             status.innerText = '';
 
+            document.getElementById('day-averages').innerHTML = '';
             speedChart.data.labels = [];
             speedChart.data.datasets.forEach(ds => ds.data = []);
             speedChart.update();
@@ -71,11 +72,74 @@ function updateUI(data) {
     const uploads = data.map(d => d.upload);
     const pings = data.map(d => d.ping);
 
+    // Calculate averages
+    const avgDownload = downloads.reduce((a, b) => a + b, 0) / data.length;
+    const avgUpload = uploads.reduce((a, b) => a + b, 0) / data.length;
+    const avgPing = pings.reduce((a, b) => a + b, 0) / data.length;
+
+    // Update Average Display
+    document.getElementById('day-averages').innerHTML = `
+        <div class="avg-item">
+            <span class="label">平均 Download</span>
+            <span class="value" style="color: var(--accent-blue)">${formatValue(avgDownload, 2)}<span class="unit">Mbps</span></span>
+        </div>
+        <div class="avg-item">
+            <span class="label">平均 Upload</span>
+            <span class="value" style="color: var(--accent-green)">${formatValue(avgUpload, 2)}<span class="unit">Mbps</span></span>
+        </div>
+        <div class="avg-item">
+            <span class="label">平均 Ping</span>
+            <span class="value" style="color: var(--accent-pink)">${formatPing(avgPing)}<span class="unit">ms</span></span>
+        </div>
+    `;
+
     // Update Chart
     speedChart.data.labels = labels;
+
+    // Main Data
     speedChart.data.datasets[0].data = downloads;
     speedChart.data.datasets[1].data = uploads;
     speedChart.data.datasets[2].data = pings;
+
+    // Add Average Lines if not present
+    if (speedChart.data.datasets.length === 3) {
+        speedChart.data.datasets.push({
+            label: 'Avg Download',
+            data: Array(data.length).fill(avgDownload),
+            borderColor: 'rgba(56, 189, 248, 0.4)',
+            borderWidth: 1.5,
+            borderDash: [10, 5],
+            pointRadius: 0,
+            fill: false,
+            yAxisID: 'y'
+        });
+        speedChart.data.datasets.push({
+            label: 'Avg Upload',
+            data: Array(data.length).fill(avgUpload),
+            borderColor: 'rgba(74, 222, 128, 0.4)',
+            borderWidth: 1.5,
+            borderDash: [10, 5],
+            pointRadius: 0,
+            fill: false,
+            yAxisID: 'y'
+        });
+        speedChart.data.datasets.push({
+            label: 'Avg Ping',
+            data: Array(data.length).fill(avgPing),
+            borderColor: 'rgba(244, 114, 182, 0.4)',
+            borderWidth: 1.5,
+            borderDash: [10, 5],
+            pointRadius: 0,
+            fill: false,
+            yAxisID: 'y1'
+        });
+    } else {
+        // Update existing average lines
+        speedChart.data.datasets[3].data = Array(data.length).fill(avgDownload);
+        speedChart.data.datasets[4].data = Array(data.length).fill(avgUpload);
+        speedChart.data.datasets[5].data = Array(data.length).fill(avgPing);
+    }
+
     speedChart.update();
 
     // Update Table
