@@ -6,7 +6,7 @@ import os
 
 from database import init_db, get_history, get_history_by_date, clear_history, get_system_logs, clear_system_logs
 from speedtest_manager import run_speed_test
-from config import CHECK_INTERVAL, STATIC_DIR, HOST, PORT, LOG_PATH
+from config import CHECK_INTERVAL, STATIC_DIR, HOST, PORT
 
 app = FastAPI(title="NetChecker")
 

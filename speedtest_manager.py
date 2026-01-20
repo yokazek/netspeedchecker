@@ -1,7 +1,7 @@
 ﻿import speedtest
 from database import save_result, add_log
 import logging
-from config import LOG_PATH
+from config import CHECK_INTERVAL
 
 class SQLiteHandler(logging.Handler):
     """ロギングをSQLiteデータベースに記録するカスタムハンドラ"""
