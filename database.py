@@ -102,7 +102,7 @@ def get_system_logs(limit: int = 100):
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT timestamp, level, message FROM system_logs ORDER BY timestamp DESC LIMIT ?",
+            "SELECT datetime(timestamp, 'localtime') as timestamp, level, message FROM system_logs ORDER BY timestamp DESC LIMIT ?",
             (limit,)
         )
         # フロントエンドが期待する形式（文字列一行ずつ）に変換
