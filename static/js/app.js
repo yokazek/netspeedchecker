@@ -240,6 +240,7 @@ async function startManualTest() {
         const checkInterval = setInterval(async () => {
             attempts++;
             await fetchData();
+            await fetchLogs();
             if (attempts >= 6) {
                 clearInterval(checkInterval);
                 btn.disabled = false;

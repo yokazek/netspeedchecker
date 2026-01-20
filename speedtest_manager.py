@@ -15,8 +15,12 @@ class SQLiteHandler(logging.Handler):
             self.handleError(record)
 
 # ロギング設定
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.INFO)
+
+# 既存のハンドラがある場合はクリア（二重登録防止）
+if root_logger.hasHandlers():
+    root_logger.handlers.clear()
 
 # フォーマット
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -29,8 +33,11 @@ sqlite_handler.setFormatter(formatter)
 console_handler = logging.StreamHandler()
 console_handler.setFormatter(formatter)
 
-logger.addHandler(sqlite_handler)
-logger.addHandler(console_handler)
+root_logger.addHandler(sqlite_handler)
+root_logger.addHandler(console_handler)
+
+# 各モジュールで使用する用のロガー
+logger = logging.getLogger(__name__)
 
 def run_speed_test():
     """ネットワーク速度を測定し、DBに保存する"""
