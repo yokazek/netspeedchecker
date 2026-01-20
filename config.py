@@ -2,7 +2,6 @@ import os
 
 # --- Database & Files ---
 DB_PATH = "netchecker.db"
-LOG_PATH = "netchecker.log"
 
 # --- Measurement Settings ---
 # 測定間隔 (1時間ごとに計測する場合は hours=1, 30分ごとの場合は minutes=30)

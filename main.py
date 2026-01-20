@@ -4,7 +4,7 @@ from fastapi.responses import FileResponse
 from apscheduler.schedulers.background import BackgroundScheduler
 import os
 
-from database import init_db, get_history, get_history_by_date, clear_history
+from database import init_db, get_history, get_history_by_date, clear_history, get_system_logs, clear_system_logs
 from speedtest_manager import run_speed_test
 from config import CHECK_INTERVAL, STATIC_DIR, HOST, PORT, LOG_PATH
 
@@ -50,13 +50,12 @@ async def trigger_speed_test(background_tasks: BackgroundTasks):
 
 @app.get("/api/logs")
 async def get_logs():
-    """最新のログを返す"""
-    if not os.path.exists(LOG_PATH):
-        return {"logs": "ログファイルがまだ作成されていません。"}
-    with open(LOG_PATH, "r", encoding="utf-8") as f:
-        # 直近の100行を返す
-        lines = f.readlines()
-        return {"logs": "".join(lines[-100:])}
+    """最新のログをDBから取得"""
+    return {"logs": get_system_logs(100)}
+
+@app.get("/api/status")
+async def get_status():
+    return {"status": "running", "scheduler": "active", "interval": str(CHECK_INTERVAL)}
 
 @app.delete("/api/history")
 async def delete_history():
@@ -67,14 +66,8 @@ async def delete_history():
 @app.delete("/api/logs")
 async def delete_logs():
     """ログをクリア"""
-    if os.path.exists(LOG_PATH):
-        with open(LOG_PATH, "w", encoding="utf-8") as f:
-            f.write("")
+    clear_system_logs()
     return {"message": "Logs cleared"}
-
-@app.get("/api/status")
-async def get_status():
-    return {"status": "running", "scheduler": "active", "interval": str(CHECK_INTERVAL)}
 
 if __name__ == "__main__":
     import uvicorn

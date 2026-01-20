@@ -1,18 +1,36 @@
 ﻿import speedtest
-from database import save_result
+from database import save_result, add_log
 import logging
 from config import LOG_PATH
 
+class SQLiteHandler(logging.Handler):
+    """ロギングをSQLiteデータベースに記録するカスタムハンドラ"""
+    def emit(self, record):
+        try:
+            log_entry = self.format(record)
+            # タイムスタンプはDB側で付与されるため、メッセージのみを送る
+            # 必要なら record.levelname などを個別に保存可能
+            add_log(record.levelname, record.getMessage())
+        except Exception:
+            self.handleError(record)
+
 # ロギング設定
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(LOG_PATH),
-        logging.StreamHandler()
-    ]
-)
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# フォーマット
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# SQLite ハンドラ
+sqlite_handler = SQLiteHandler()
+sqlite_handler.setFormatter(formatter)
+
+# コンソールハンドラ
+console_handler = logging.StreamHandler()
+console_handler.setFormatter(formatter)
+
+logger.addHandler(sqlite_handler)
+logger.addHandler(console_handler)
 
 def run_speed_test():
     """ネットワーク速度を測定し、DBに保存する"""

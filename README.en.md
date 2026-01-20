@@ -50,6 +50,14 @@ CHECK_INTERVAL = {"minutes": 30}  # Example: every 30 minutes
 PORT = 8080                       # Server port
 ```
 
+## Data Management
+Designed for long-term 24/7 operation:
+- **Measurement Data**: All results are stored in `netchecker.db` (SQLite). The data is very lightweight, typically taking only a few MBs even after years of use.
+- **System Logs**: Also stored in the database, but only the **latest 1000 entries** are kept. Older logs are automatically purged (rotated) to save disk space.
+- **Cleanup**: You can manually clear all history or logs at any time via the dashboard buttons.
+
+## Tech Stack
+- **Backend**: Python / FastAPI / APScheduler / SQLite
 - **Frontend**: Vanilla JS / CSS / Chart.js
 
 ## License
