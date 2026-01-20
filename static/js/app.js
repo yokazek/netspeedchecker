@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCharts();
     fetchData();
     fetchLogs();
+    updateStatusInfo();
 
     document.getElementById('btn-test').addEventListener('click', startManualTest);
     document.getElementById('btn-refresh-logs').addEventListener('click', fetchLogs);
@@ -296,5 +297,27 @@ async function clearLogs() {
         fetchLogs();
     } catch (error) {
         console.error('Error clearing logs:', error);
+    }
+}
+async function updateStatusInfo() {
+    try {
+        const data = await api.fetchStatus();
+        const badge = document.getElementById('auto-test-badge');
+        if (data && data.interval) {
+            // interval format is like "{'minutes': 20}" or similar
+            const intervalStr = data.interval.replace(/'/g, '"');
+            try {
+                const interval = JSON.parse(intervalStr.replace(/"/g, '"'));
+                let text = '';
+                if (interval.hours) text += `${interval.hours}h `;
+                if (interval.minutes) text += `${interval.minutes}m `;
+                if (interval.seconds) text += `${interval.seconds}s `;
+                badge.innerHTML = `<span class="pulse"></span> Auto-measurement: every ${text.trim()}`;
+            } catch (e) {
+                badge.innerHTML = `<span class="pulse"></span> Auto-measurement: ${data.interval}`;
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching status:', error);
     }
 }

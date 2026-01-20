@@ -29,5 +29,10 @@ export const api = {
 
     async clearLogs() {
         return await fetch('/api/logs', { method: 'DELETE' });
+    },
+
+    async fetchStatus() {
+        const response = await fetch('/api/status');
+        return await response.json();
     }
 };
