@@ -51,6 +51,7 @@ CHECK_INTERVAL = {"minutes": 30}  # 30分間隔にする場合
 PORT = 8080                       # 使用するポート番号
 ```
 
-## 技術スタック
-- **Backend**: Python / FastAPI / APScheduler / SQLite
 - **Frontend**: Vanilla JS / CSS / Chart.js
+
+## ライセンス
+[MIT License](LICENSE)

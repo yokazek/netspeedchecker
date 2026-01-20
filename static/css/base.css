@@ -50,3 +50,20 @@ header p {
     color: var(--text-secondary);
     font-size: 1.1rem;
 }
+footer {
+    text-align: center;
+    margin-top: 5rem;
+    padding-bottom: 2rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+footer a {
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

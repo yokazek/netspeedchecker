@@ -50,6 +50,7 @@ CHECK_INTERVAL = {"minutes": 30}  # Example: every 30 minutes
 PORT = 8080                       # Server port
 ```
 
-## Tech Stack
-- **Backend**: Python / FastAPI / APScheduler / SQLite
 - **Frontend**: Vanilla JS / CSS / Chart.js
+
+## License
+[MIT License](LICENSE)
