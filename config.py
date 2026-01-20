@@ -1,9 +1,9 @@
 import os
 
 # --- Database & Files ---
-# ラズパイで運用する場合、このパスを /tmp/netchecker.db などに変更するとRAMディスク上で動作し、SDカードを保護できます。
-# 環境変数 NETCHECKER_DB で上書きも可能です。
-DB_PATH = os.getenv("NETCHECKER_DB", os.path.join(os.path.dirname(os.path.abspath(__file__)), "netchecker.db"))
+# ラズパイで運用する場合、このパスを /tmp/network-speed-monitor.db などに変更するとRAMディスク上で動作し、SDカードを保護できます。
+# 環境変数 NETWORK_SPEED_MONITOR_DB で上書きも可能です。
+DB_PATH = os.getenv("NETWORK_SPEED_MONITOR_DB", os.path.join(os.path.dirname(os.path.abspath(__file__)), "network-speed-monitor.db"))
 
 # --- Measurement Settings ---
 # 測定間隔 (1時間ごとに計測する場合は hours=1, 30分ごとの場合は minutes=30)

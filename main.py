@@ -8,7 +8,7 @@ from database import init_db, get_history, get_history_by_date, clear_history, g
 from speedtest_manager import run_speed_test
 from config import CHECK_INTERVAL, STATIC_DIR, HOST, PORT
 
-app = FastAPI(title="NetChecker")
+app = FastAPI(title="Network Speed Monitor")
 
 # データベース初期化
 init_db()

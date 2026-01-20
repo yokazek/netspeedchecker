@@ -1,8 +1,8 @@
 ﻿#!/bin/bash
 
-# NetChecker Installer for Raspberry Pi
+# Network Speed Monitor Installer for Raspberry Pi
 
-echo "🚀 NetChecker のセットアップを開始します..."
+echo "🚀 Network Speed Monitor のセットアップを開始します..."
 
 # システムパッケージの更新確認
 echo "📦 システムパッケージを確認中..."

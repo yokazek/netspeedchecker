@@ -1,8 +1,8 @@
-﻿# NetSpeedChecker
+﻿# Network Speed Monitor
 
 [English Version (英語版)](README.en.md)
 
-![NetSpeedChecker Dashboard](screenshot.png)
+![Network Speed Monitor Dashboard](screenshot.png)
 
 ネットワーク速度測定ツールです。一定間隔で速度を計測し、モダンな Web ダッシュボードで履歴を確認できます。
  
@@ -21,7 +21,7 @@ Nuro光 に変更してからなんかWifi使っていると、つまりみた�
 
 ```bash
 # クローンまたはコピー後、ディレクトリに移動
-cd netspeedchecker
+cd network-speed-monitor
 
 # 実行権限を付与
 chmod +x install.sh run.sh
@@ -53,7 +53,7 @@ PORT = 8080                       # 使用するポート番号
 
 ## データ管理
 長期間の運用を想定した設計になっています：
-- **測定データ**: すべて `netchecker.db` (SQLite) に保存されます。データ量は軽量なため、数年分の蓄積でも数MB程度です。
+- **測定データ**: すべて `network-speed-monitor.db` (SQLite) に保存されます。データ量は軽量なため、数年分の蓄積でも数MB程度です。
 - **システムログ**: 同じくデータベース内に保存されますが、**最新の1000件**のみを保持し、古いものは自動的に削除（ローテーション）されるため、ディスク容量を圧迫しません。
 - **クリーンアップ**: ダッシュボードのボタンから、いつでも測定履歴やログを手動で全削除できます。
 
@@ -63,7 +63,7 @@ Raspberry PiのSDカードの摩耗を抑えるため、以下の最適化を標
 - **ログの自動制限**: データベース内のシステムログは最新1,000件のみを保持します。
 
 さらに保護を強化したい場合は、**RAMディスク (tmpfs) の活用** をお勧めします：
-1. `config.py` の `DB_PATH` を `/tmp/netchecker.db` などに変更する。
+1. `config.py` の `DB_PATH` を `/tmp/network-speed-monitor.db` などに変更する。
 2. これにより全ての書き込みがメモリ上で行われるようになり、SDカードの寿命を最大限延ばせます（※再起動するとデータは消えます）。
 
 ## 技術スタック

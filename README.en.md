@@ -1,8 +1,8 @@
-# NetSpeedChecker
+# Network Speed Monitor
 
 [Japanese Version (日本語版)](README.md)
 
-![NetSpeedChecker Dashboard](screenshot.png)
+![Network Speed Monitor Dashboard](screenshot.png)
 
 A network speed monitoring tool. Measures speed at regular intervals and provides a modern web dashboard to view history.
 
@@ -20,7 +20,7 @@ After switching to Nuro Hikari, I noticed occasional stuttering while using WiFi
 
 ```bash
 # Clone or copy the directory, then move into it
-cd netspeedchecker
+cd network-speed-monitor
 
 # Grant execution permissions
 chmod +x install.sh run.sh
@@ -52,7 +52,7 @@ PORT = 8080                       # Server port
 
 ## Data Management
 Designed for long-term 24/7 operation:
-- **Measurement Data**: All results are stored in `netchecker.db` (SQLite). The data is very lightweight, typically taking only a few MBs even after years of use.
+- **Measurement Data**: All results are stored in `network-speed-monitor.db` (SQLite). The data is very lightweight, typically taking only a few MBs even after years of use.
 - **System Logs**: Also stored in the database, but only the **latest 1000 entries** are kept. Older logs are automatically purged (rotated) to save disk space.
 - **Cleanup**: You can manually clear all history or logs at any time via the dashboard buttons.
 
@@ -62,7 +62,7 @@ To reduce SD card wear on Raspberry Pi, the following optimizations are implemen
 - **Log Management**: System logs are automatically capped at the latest 1000 entries.
 
 For maximum protection, we recommend using a **RAM disk (tmpfs)**:
-1. Change `DB_PATH` in `config.py` to `/tmp/netchecker.db` (or any path in `/tmp`).
+1. Change `DB_PATH` in `config.py` to `/tmp/network-speed-monitor.db` (or any path in `/tmp`).
 2. This directs all database writes to memory, preventing SD card wear (Note: Data will be lost upon reboot).
 
 ## Tech Stack

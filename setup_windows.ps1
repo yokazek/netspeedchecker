@@ -1,6 +1,6 @@
-﻿# NetChecker Setup for Windows
+﻿# Network Speed Monitor Setup for Windows
 
-Write-Host "🚀 NetChecker のセットアップを開始します..." -ForegroundColor Cyan
+Write-Host "🚀 Network Speed Monitor のセットアップを開始します..." -ForegroundColor Cyan
 
 # 仮想環境の作成
 if (-not (Test-Path "venv")) {
