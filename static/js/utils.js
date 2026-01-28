@@ -9,7 +9,9 @@ export const formatPing = (val) =>
     (val !== null && val !== undefined) ? Math.round(val) : '--';
 
 export const formatTime = (timestamp) => {
-    const date = new Date(timestamp + " UTC");
+    // iOS Safari互換: "YYYY-MM-DD HH:mm:ss" を "YYYY-MM-DDTHH:mm:ssZ" (ISO 8601) に変換
+    const isoTimestamp = timestamp.replace(' ', 'T') + 'Z';
+    const date = new Date(isoTimestamp);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 

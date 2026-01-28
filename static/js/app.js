@@ -107,12 +107,15 @@ function updateDashboard(data) {
 function setDefaultRange() {
     if (chartDataRaw.length === 0) return;
 
-    const latestTime = new Date(chartDataRaw[chartDataRaw.length - 1].timestamp + " UTC").getTime();
+    // iOS Safari互換: ISO 8601形式に変換
+    const latestTimestamp = chartDataRaw[chartDataRaw.length - 1].timestamp.replace(' ', 'T') + 'Z';
+    const latestTime = new Date(latestTimestamp).getTime();
     const sixHoursAgo = latestTime - (6 * 60 * 60 * 1000);
 
     let minIdx = 0;
     for (let i = chartDataRaw.length - 1; i >= 0; i--) {
-        const t = new Date(chartDataRaw[i].timestamp + " UTC").getTime();
+        const isoTs = chartDataRaw[i].timestamp.replace(' ', 'T') + 'Z';
+        const t = new Date(isoTs).getTime();
         if (t < sixHoursAgo) {
             minIdx = i + 1;
             break;
